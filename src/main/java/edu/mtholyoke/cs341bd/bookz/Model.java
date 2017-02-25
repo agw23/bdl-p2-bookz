@@ -8,10 +8,12 @@ import java.util.Map;
 
 public class Model {
 	Map<String, GutenbergBook> library;
+	List<GutenbergBook> review; 
 
 	public Model() throws IOException {
 		// start with an empty hash-map; tell it it's going to be big in advance:
 		library = new HashMap<>(40000);
+		review = new ArrayList<>(); 
 		// do the hard work:
 		DataImport.loadJSONBooks(library);
 	}
@@ -35,5 +37,13 @@ public class Model {
 
 	public List<GutenbergBook> getRandomBooks(int count) {
 		return ReservoirSampler.take(count, library.values());
+	}
+	
+	public void addToReview(GutenbergBook newFlag) {
+		review.add(newFlag); 
+	}
+	
+	public List<GutenbergBook> getReview() {
+		return review; 
 	}
 }

@@ -8,9 +8,12 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 
+import com.sun.scenario.effect.Blend.Mode;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -88,7 +91,17 @@ public class BookzServer extends AbstractHandler {
 
 		String method = req.getMethod();
 		String path = req.getPathInfo();
-
+		
+		//when "Report bad entry" button is clicked
+		//TODO: figure out why this isn't rerouting
+		if ("POST".equals(method)&&"/review".equals(path)) {
+			//get books
+			
+			try (PrintWriter txt = resp.getWriter()) {
+				view.printReviewPage(model.getReview(), txt); 
+			}
+		}
+		
 		if ("GET".equals(method)) {
 			if("/robots.txt".equals(path)) {
 				// We're returning a fake file? Here's why: http://www.robotstxt.org/

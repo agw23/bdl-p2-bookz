@@ -37,6 +37,7 @@ public class HTMLView {
 	public String getStaticURL(String resource) {
 		return "static/" + resource;
 	}
+	
 
 	/**
 	 * HTML bottom boilerplate; close all the tags we open in
@@ -53,7 +54,7 @@ public class HTMLView {
 	void showFrontPage(Model model, HttpServletResponse resp) throws IOException {
 		try (PrintWriter html = resp.getWriter()) {
 			printPageStart(html, "Bookz");
-
+			
 			html.println("<h3>Browse books by title</h3>");
 
 			for(char letter = 'A'; letter <= 'Z'; letter++) {
@@ -79,6 +80,7 @@ public class HTMLView {
 	}
 
 	private void printBookHTML(PrintWriter html, GutenbergBook book) {
+	 
 		html.println("<div class='book'>");
 		html.println("<a class='none' href='/book/"+book.id+"'>");
 		html.println("<div class='title'>"+book.title+"</div>");
@@ -86,6 +88,14 @@ public class HTMLView {
 			html.println("<div class='creator'>" + book.creator + "</div>");
 		}
 		html.println("<a href='"+book.getGutenbergURL()+"'>On Project Gutenberg</a>");
+		// TODO, shift buttons to right
+		//html.println("<a href=/"/review/"<input type=button value=\"Report bad entry\"></input></href>");
+		//html.println("<button id=\"flag\" method=\"POST\" action=\"submit\">Report bad entry</button>"); 
+		html.println("<form action=\"/review\" method=\"POST\">");
+		html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\">"); 
+		html.println("<input type=\"submit\" value=\"Flag Entry!\" />"); 
+		html.println("</form>"); 
+		
 		// TODO, finish up fields.
 		html.println("</a>");
 		html.println("</div>");
@@ -94,12 +104,16 @@ public class HTMLView {
 	public void showBookCollection(List<GutenbergBook> theBooks, HttpServletResponse resp) throws IOException {
 		try (PrintWriter html = resp.getWriter()) {
 			printPageStart(html, "Bookz");
-
 			for (int i = 0; i < Math.min(20,theBooks.size()); i++) {
 				printBookHTML(html, theBooks.get(i));
 			}
 
 			printPageEnd(html);
 		}
+	}
+
+	public void printReviewPage(List<GutenbergBook> flaggedBooks, PrintWriter txt) {
+		txt.println("Books for review");
+		
 	}
 }
