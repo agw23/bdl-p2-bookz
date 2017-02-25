@@ -39,8 +39,9 @@ public class Model {
 		return ReservoirSampler.take(count, library.values());
 	}
 	
-	public void addToReview(GutenbergBook newFlag) {
-		review.add(newFlag); 
+	public void addToReview(String str) {
+		review.add(library.get(str));
+		System.out.println(review);
 	}
 	
 	public List<GutenbergBook> getReview() {

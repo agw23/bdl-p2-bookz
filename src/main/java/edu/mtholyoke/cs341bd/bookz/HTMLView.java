@@ -88,11 +88,8 @@ public class HTMLView {
 			html.println("<div class='creator'>" + book.creator + "</div>");
 		}
 		html.println("<a href='"+book.getGutenbergURL()+"'>On Project Gutenberg</a>");
-		// TODO, shift buttons to right
-		//html.println("<a href=/"/review/"<input type=button value=\"Report bad entry\"></input></href>");
-		//html.println("<button id=\"flag\" method=\"POST\" action=\"submit\">Report bad entry</button>"); 
 		html.println("<form action=\"/review\" method=\"POST\">");
-		html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\">"); 
+		html.println("<input type=\"hidden\" name=\"book\" value="+book.id+">"); 
 		html.println("<input type=\"submit\" value=\"Flag Entry!\" />"); 
 		html.println("</form>"); 
 		
@@ -112,8 +109,42 @@ public class HTMLView {
 		}
 	}
 
+	void printReviewStart(PrintWriter html, String title) {
+			html.println("<!DOCTYPE html>"); // HTML5
+			html.println("<html>");
+			html.println("  <head>");
+			html.println("    <title>" + title + "</title>");
+			html.println("    " + metaURL);
+			html.println("    <link type=\"text/css\" rel=\"stylesheet\" href=\"" + getStaticURL("bookz.css") + "\">");
+			html.println("  </head>");
+			html.println("  <body>");
+			//TODO: figure out why review won't link to itself
+			html.println("  <a href=\"/review\"><h1 class=\"logo\">"+title+"</h1></a>");
+			
+	}
+	
+	private void printReviewBookHTML(PrintWriter html, GutenbergBook book) {
+		 
+		html.println("<div class='book'>");
+		html.println("<a class='none' href='/book/"+book.id+"'>");
+		html.println("<div class='title'>"+book.title+"</div>");
+		if(book.creator != null) {
+			html.println("<div class='creator'>" + book.creator + "</div>");
+		}
+		html.println("<a href='"+book.getGutenbergURL()+"'>On Project Gutenberg</a>");
+		
+		// TODO, finish up fields.
+		html.println("</a>");
+		html.println("</div>");
+	}
 	public void printReviewPage(List<GutenbergBook> flaggedBooks, PrintWriter txt) {
-		txt.println("Books for review");
+		printReviewStart(txt, "Flagged Books"); 
+		
+		for (GutenbergBook book : flaggedBooks) {
+			//txt.println(book.title);
+			printReviewBookHTML(txt, book);
+		}
+		printPageEnd(txt);
 		
 	}
 }

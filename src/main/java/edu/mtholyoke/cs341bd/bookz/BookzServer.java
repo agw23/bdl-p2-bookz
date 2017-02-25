@@ -95,8 +95,8 @@ public class BookzServer extends AbstractHandler {
 		//when "Report bad entry" button is clicked
 		//TODO: figure out why this isn't rerouting
 		if ("POST".equals(method)&&"/review".equals(path)) {
-			//get books
-			
+			//System.out.println(req.getParameter("book")); 
+			model.addToReview(req.getParameter("book"));
 			try (PrintWriter txt = resp.getWriter()) {
 				view.printReviewPage(model.getReview(), txt); 
 			}
