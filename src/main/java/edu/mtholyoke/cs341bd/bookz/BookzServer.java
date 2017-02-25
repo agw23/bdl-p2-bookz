@@ -103,6 +103,11 @@ public class BookzServer extends AbstractHandler {
 		}
 		
 		if ("GET".equals(method)) {
+			
+			if ("/review".equals(path)) {
+				view.printReviewPage(model.getReview(), resp.getWriter());
+			}
+			
 			if("/robots.txt".equals(path)) {
 				// We're returning a fake file? Here's why: http://www.robotstxt.org/
 				resp.setContentType("text/plain");

@@ -118,9 +118,10 @@ public class HTMLView {
 			html.println("    <link type=\"text/css\" rel=\"stylesheet\" href=\"" + getStaticURL("bookz.css") + "\">");
 			html.println("  </head>");
 			html.println("  <body>");
+			 
 			//TODO: figure out why review won't link to itself
-			html.println("  <a href=\"/review\"><h1 class=\"logo\">"+title+"</h1></a>");
-			
+			html.println("  <a href='/front'><h1 class=\"logo\">"+title+"</h1></a>");
+			html.println("<h2> Flagged books </h2>");
 	}
 	
 	private void printReviewBookHTML(PrintWriter html, GutenbergBook book) {
@@ -138,7 +139,7 @@ public class HTMLView {
 		html.println("</div>");
 	}
 	public void printReviewPage(List<GutenbergBook> flaggedBooks, PrintWriter txt) {
-		printReviewStart(txt, "Flagged Books"); 
+		printReviewStart(txt, "Bookz"); 
 		
 		for (GutenbergBook book : flaggedBooks) {
 			//txt.println(book.title);
