@@ -8,9 +8,11 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -84,14 +86,30 @@ public class BookzServer extends AbstractHandler {
 	 */
 	@Override
 	public void handle(String resource, Request jettyReq, HttpServletRequest req, HttpServletResponse resp)
-		throws IOException, ServletException 
+			throws IOException, ServletException 
 	{
 		System.out.println(jettyReq);
 
 		String method = req.getMethod();
 		String path = req.getPathInfo();
-	
-		if ("GET".equals(method)) {
+
+				if ("POST".equals(method)&&"/review".equals(path)) 
+				{
+					//System.out.println(req.getParameter("book")); 
+					model.addToReview(req.getParameter("book"));
+					try (PrintWriter txt = resp.getWriter()) {
+						view.printReviewPage(model.getReview(), txt); 
+					}
+				}
+		
+
+		if("POST".equals(method) && "/search".equals(path))
+		{		
+			showResultsPage(req, resp);	
+		}
+
+		if ("GET".equals(method)) 
+		{
 			if("/robots.txt".equals(path)) 
 			{
 				// We're returning a fake file? Here's why: http://www.robotstxt.org/
@@ -101,29 +119,18 @@ public class BookzServer extends AbstractHandler {
 					txt.println("User-Agent: *");
 					txt.println("Disallow: /");
 				}
-			}	
-//				else if( "/search".equals(path) )
-//				{
-//						
-//							//model.addtoSearchList(req.getParameter("book"));
-//							showResultsPage(req, resp);
-//				}
-//				return;
 			}
 			
+
 			String titleCmd = Util.getAfterIfStartsWith("/title/", path);
-			if(titleCmd != null) {
+			if(titleCmd != null) 
+			{
+				
 				char firstChar = titleCmd.charAt(0);
 				view.showBookCollection(this.model.getBooksStartingWith(firstChar), resp);
 			}
-//			
-			if("POST".equals(method) && "/search".equals(path))
-			{		
-					//model.addtoSearchList(req.getParameter("book"));
-					showResultsPage(req, resp);	
-			}
 
-	
+
 			// Check for startsWith and substring
 			String bookId = Util.getAfterIfStartsWith("/book/", path);
 			if(bookId != null) 
@@ -132,35 +139,38 @@ public class BookzServer extends AbstractHandler {
 			}
 
 			// Front page!
-			if ("/front".equals(path) || "/".equals(path)) {
+			if ("/front".equals(path) || "/".equals(path)) 
+			{
 				view.showFrontPage(this.model, resp);
 				return;
 			}
-		}
-		
-		
-		private void showResultsPage(HttpServletRequest req, HttpServletResponse resp) throws IOException 
-		{
-		    Map<String, String[]> parameterMap = req.getParameterMap();
-		    // if for some reason, we have multiple "message" fields in our form, just put a space between them, see Util.join.
-		    // Note that message comes from the name="message" parameter in our <input> elements on our form.
-		    String message = Util.join(parameterMap.get("message"));		    
-		    String author = Util.join(parameterMap.get("author"));
 
-		    if(!message.equals(""))
-		    {
-		      // Good, got new message from form.
-		      resp.setStatus(HttpServletResponse.SC_ACCEPTED); 
-		      view.printHTMLResultsPage(model.getBooksStartingWithTitles(message), resp);
-		      return;
-		    }
-		    
-//		    else if ( !author.equals(""))
-//		    {
-//		    	view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
-//		    	return;
-//		    }
-		    // user submitted something weird.
-		    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad user.");
-		 }
+		}
+	}
+
+
+	private void showResultsPage(HttpServletRequest req, HttpServletResponse resp) throws IOException 
+	{
+		Map<String, String[]> parameterMap = req.getParameterMap();
+		// if for some reason, we have multiple "message" fields in our form, just put a space between them, see Util.join.
+		// Note that message comes from the name="message" parameter in our <input> elements on our form.
+		String message = Util.join(parameterMap.get("message"));		    
+		//String author = Util.join(parameterMap.get("author"));
+
+		if(!message.equals(""))
+		{
+			// Good, got new message from form.
+			resp.setStatus(HttpServletResponse.SC_ACCEPTED); 
+			view.printHTMLResultsPage(model.getBooksStartingWithTitles(message), resp);
+			return;
+		}
+
+		//		    else if ( !author.equals(""))
+		//		    {
+		//		    	view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
+		//		    	return;
+		//		    }
+		// user submitted something weird.
+		resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad user.");
+	}
 }

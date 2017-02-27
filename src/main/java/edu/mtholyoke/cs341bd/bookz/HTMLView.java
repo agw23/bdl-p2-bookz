@@ -77,12 +77,9 @@ public class HTMLView {
 			html.println(" <div class= \"form\">");
 				html.println(" <form action=\"search\" method= \"POST\"> ");
 				html.println(" <div><input type=\"text\" size=40 name=\"message\" id=\"message\" placeholder=\"Search by Title\" />");
-				html.println(" <input type = \"submit\" value=\"Search for your book by title!\" />");
 				html.println(" <div><input type=\"text\" size=40 name=\"author\" id=\"author\" placeholder=\"Search by Author\" />");
-				html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
 				html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\" /> " );
-				//html.println(" <input type = \"submit\" value=\"Search for your book by title!\" />");
-				//html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
+				html.println(" <input type = \"submit\" value=\"Search for your book!\" />");
 				html.println( "</form>" );
 				html.println(" </div>");
 				
@@ -156,5 +153,45 @@ public class HTMLView {
 			printPageEnd(html);
 		}
 	}
+	
+	void printReviewStart(PrintWriter html, String title) {
+		html.println("<!DOCTYPE html>"); // HTML5
+		html.println("<html>");
+		html.println("  <head>");
+		html.println("    <title>" + title + "</title>");
+		html.println("    " + metaURL);
+		html.println("    <link type=\"text/css\" rel=\"stylesheet\" href=\"" + getStaticURL("bookz.css") + "\">");
+		html.println("  </head>");
+		html.println("  <body>");
+		 
+		//TODO: figure out why review won't link to itself
+		html.println("  <a href='/front'><h1 class=\"logo\">"+title+"</h1></a>");
+		html.println("<h2> Flagged books </h2>");
+}
+
+private void printReviewBookHTML(PrintWriter html, GutenbergBook book) {
+	 
+	html.println("<div class='book'>");
+	html.println("<a class='none' href='/book/"+book.id+"'>");
+	html.println("<div class='title'>"+book.title+"</div>");
+	if(book.creator != null) {
+		html.println("<div class='creator'>" + book.creator + "</div>");
+	}
+	html.println("<a href='"+book.getGutenbergURL()+"'>On Project Gutenberg</a>");
+	
+	// TODO, finish up fields.
+	html.println("</a>");
+	html.println("</div>");
+}
+
+public void printReviewPage(List<GutenbergBook> flaggedBooks, PrintWriter txt) {
+	printReviewStart(txt, "Bookz"); 
+	
+	for (GutenbergBook book : flaggedBooks) {
+		printReviewBookHTML(txt, book);
+	}
+	printPageEnd(txt);
+	
+}
 
 }

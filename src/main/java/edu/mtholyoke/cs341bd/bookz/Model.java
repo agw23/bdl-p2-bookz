@@ -10,14 +10,22 @@ import java.util.Map;
 public class Model 
 {
 	Map<String, GutenbergBook> library;
+
 	Map<String, GutenbergBook> bookTitles;
 	Map<String, GutenbergBook> authors;
 	List<GutenbergBook> searchList;
 
+	List<GutenbergBook> review; 
+
+
 	public Model() throws IOException {
 		// start with an empty hash-map; tell it it's going to be big in advance:
 		library = new HashMap<>(40000);
+
 		authors = new HashMap<>(4000);
+
+		review = new ArrayList<>(); 
+
 		// do the hard work:
 		DataImport.loadJSONBooks(library);
 		searchList = new ArrayList<>();
@@ -85,5 +93,14 @@ public class Model
 
 	public List<GutenbergBook> getRandomBooks(int count) {
 		return ReservoirSampler.take(count, library.values());
+	}
+	
+	public void addToReview(String str) {
+		review.add(library.get(str));
+		System.out.println(review);
+	}
+	
+	public List<GutenbergBook> getReview() {
+		return review; 
 	}
 }
