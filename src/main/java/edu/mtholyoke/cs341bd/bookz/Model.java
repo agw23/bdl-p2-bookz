@@ -54,9 +54,11 @@ public class Model
 	{
 		// TODO, maybe it makes sense to not compute these every time.
 		//char query = Character.toUpperCase(title);
-		List<GutenbergBook> matches = new ArrayList<>(10000); // big
+		List<GutenbergBook> matches = new ArrayList<>(10000);// big
+		
 		for (GutenbergBook book : library.values()) {
-			String first = book.title;
+			
+			String first = book.title.toLowerCase();
 			if(first.contains(myTitle)) 
 			{	
 				matches.add(book);
@@ -80,11 +82,17 @@ public class Model
 	{
 		List<GutenbergBook> matches = new ArrayList<>(20); // big
 		for (GutenbergBook book : library.values()) {
-			String first = book.creator;
-			if(first.contains(author)) 
-			{	
-				matches.add(book);
-			}
+			String first;
+					
+				if (book.creator != null)
+				{	
+					first = book.creator.toLowerCase();
+					if(first.contains(author)) 
+					{	
+						matches.add(book);
+					}
+				}
+			
 		}
 			return matches;
 		
