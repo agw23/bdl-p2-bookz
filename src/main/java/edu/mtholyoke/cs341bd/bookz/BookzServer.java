@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * @author jfoley
@@ -83,21 +84,31 @@ public class BookzServer extends AbstractHandler {
 	 */
 	@Override
 	public void handle(String resource, Request jettyReq, HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
+		throws IOException, ServletException 
+	{
 		System.out.println(jettyReq);
 
 		String method = req.getMethod();
 		String path = req.getPathInfo();
-
+	
 		if ("GET".equals(method)) {
-			if("/robots.txt".equals(path)) {
+			if("/robots.txt".equals(path)) 
+			{
 				// We're returning a fake file? Here's why: http://www.robotstxt.org/
 				resp.setContentType("text/plain");
-				try (PrintWriter txt = resp.getWriter()) {
+				try (PrintWriter txt = resp.getWriter()) 
+				{
 					txt.println("User-Agent: *");
 					txt.println("Disallow: /");
 				}
-				return;
+			}	
+//				else if( "/search".equals(path) )
+//				{
+//						
+//							//model.addtoSearchList(req.getParameter("book"));
+//							showResultsPage(req, resp);
+//				}
+//				return;
 			}
 			
 			String titleCmd = Util.getAfterIfStartsWith("/title/", path);
@@ -105,10 +116,19 @@ public class BookzServer extends AbstractHandler {
 				char firstChar = titleCmd.charAt(0);
 				view.showBookCollection(this.model.getBooksStartingWith(firstChar), resp);
 			}
+//			
+			if("POST".equals(method) && "/search".equals(path))
+			{		
+					//model.addtoSearchList(req.getParameter("book"));
+					showResultsPage(req, resp);
+		
+			}
 
+	
 			// Check for startsWith and substring
 			String bookId = Util.getAfterIfStartsWith("/book/", path);
-			if(bookId != null) {
+			if(bookId != null) 
+			{
 				view.showBookPage(this.model.getBook(bookId), resp);
 			}
 
@@ -118,5 +138,26 @@ public class BookzServer extends AbstractHandler {
 				return;
 			}
 		}
-	}
+		
+		
+		private void showResultsPage(HttpServletRequest req, HttpServletResponse resp) throws IOException 
+		{
+		    Map<String, String[]> parameterMap = req.getParameterMap();
+		    // if for some reason, we have multiple "message" fields in our form, just put a space between them, see Util.join.
+		    // Note that message comes from the name="message" parameter in our <input> elements on our form.
+		    String message = Util.join(parameterMap.get("message"));		    
+		    String author = Util.join(parameterMap.get("author"));
+
+		    if(!message.equals("") || !author.equals("")) 
+		    {
+		      // Good, got new message from form.
+		      resp.setStatus(HttpServletResponse.SC_ACCEPTED); 
+		      view.printHTMLResultsPage(model.getBooksStartingWithTitles(message), resp);
+		      view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
+		      
+		      return;
+		    }
+		    // user submitted something weird.
+		    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad user.");
+		 }
 }

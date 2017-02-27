@@ -53,6 +53,7 @@ public class HTMLView {
 	void showFrontPage(Model model, HttpServletResponse resp) throws IOException {
 		try (PrintWriter html = resp.getWriter()) {
 			printPageStart(html, "Bookz");
+			makeResultForm(html);
 
 			html.println("<h3>Browse books by title</h3>");
 
@@ -69,15 +70,54 @@ public class HTMLView {
 			printPageEnd(html);
 		}
 	}
+	
+	public void makeResultForm(PrintWriter html)  
+	{		
+			//<!-- forms can do POST or GET or even others like PUT as you write inside method -->
+			html.println(" <div class= \"form\">");
+				html.println(" <form action=\"search\" method= \"POST\"> ");
+				html.println(" <div><input type=\"text\" size=40 name=\"message\" id=\"message\" placeholder=\"Search by Title\" />");
+				html.println(" <div><input type=\"text\" size=40 name=\"author\" id=\"author\" placeholder=\"Search by Author\" />");
+				html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\" /> " );
+				html.println(" <input type = \"submit\" value=\"Search for your book!\" />");
+				html.println( "</form>" );
+				html.println(" </div>");
+				
+	}
 
-	public void showBookPage(GutenbergBook book, HttpServletResponse resp) throws IOException {
-		try (PrintWriter html = resp.getWriter()) {
-			printPageStart(html, "Bookz");
-			printBookHTML(html, book);
+	void printSearchStart(PrintWriter html, String title) 
+	{
+		html.println("<!DOCTYPE html>"); // HTML5
+		html.println("<html>");
+		html.println("  <head>");
+		html.println("    <title>" + title + "</title>");
+		html.println("    " + metaURL);
+		html.println("    <link type=\"text/css\" rel=\"stylesheet\" href=\"" + getStaticURL("bookz.css") + "\">");
+		html.println("  </head>");
+		html.println("  <body>");
+		html.println("  <a href='/front'><h1 class=\"logo\">"+title+"</h1></a>");
+		
+		html.println("<h2>This is what we found!</h2>");
+	}
+	 
+	
+	public void printHTMLResultsPage(List<GutenbergBook> myList, HttpServletResponse resp) throws IOException 
+	{	
+		try (PrintWriter html = resp.getWriter()) 
+		{
+			printSearchStart(html, "Bookz");
+			makeResultForm(html);
+			
+			for (GutenbergBook myBooks: myList)
+			{
+				printBookHTML(html, myBooks);
+			}
+			
 			printPageEnd(html);
 		}
 	}
-
+		
+	
 	private void printBookHTML(PrintWriter html, GutenbergBook book) {
 		html.println("<div class='book'>");
 		html.println("<a class='none' href='/book/"+book.id+"'>");
@@ -90,9 +130,20 @@ public class HTMLView {
 		html.println("</a>");
 		html.println("</div>");
 	}
-
-	public void showBookCollection(List<GutenbergBook> theBooks, HttpServletResponse resp) throws IOException {
+	
+	
+	public void showBookPage(GutenbergBook book, HttpServletResponse resp) throws IOException {
 		try (PrintWriter html = resp.getWriter()) {
+			printPageStart(html, "Bookz");
+			printBookHTML(html, book);
+			printPageEnd(html);
+		}
+	}
+
+	
+	public void showBookCollection(List<GutenbergBook> theBooks, HttpServletResponse resp) throws IOException {
+		try (PrintWriter html = resp.getWriter()) 
+		{
 			printPageStart(html, "Bookz");
 
 			for (int i = 0; i < Math.min(20,theBooks.size()); i++) {
@@ -102,4 +153,5 @@ public class HTMLView {
 			printPageEnd(html);
 		}
 	}
+
 }

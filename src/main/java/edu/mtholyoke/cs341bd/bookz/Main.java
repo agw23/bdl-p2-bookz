@@ -11,8 +11,13 @@ public class Main {
   public static void main(String[] args) throws IOException {
     int port = 1234;
     String baseURL = "/";
-
-
+    
+    
+    Model model = new Model();
+    //model.getBooksStartingWithTitles("Lost Lenore");
+    
+    
+    
     if(args.length > 0) {
       // use port 1234 or the first argument specified to this program.
       port = Integer.parseInt(args[0]);
