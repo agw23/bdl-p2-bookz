@@ -13,7 +13,6 @@ public class Main {
     String baseURL = "/";
     
     
-    Model model = new Model();
     //model.getBooksStartingWithTitles("Lost Lenore");
     
     

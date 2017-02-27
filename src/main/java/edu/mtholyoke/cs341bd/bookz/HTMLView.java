@@ -117,20 +117,38 @@ public class HTMLView {
 		}
 	}
 		
-	
 	private void printBookHTML(PrintWriter html, GutenbergBook book) {
+		 
 		html.println("<div class='book'>");
 		html.println("<a class='none' href='/book/"+book.id+"'>");
 		html.println("<div class='title'>"+book.title+"</div>");
-		if(book.creator != null) {
+		if(book.creator != null) 
+		{
 			html.println("<div class='creator'>" + book.creator + "</div>");
 		}
 		html.println("<a href='"+book.getGutenbergURL()+"'>On Project Gutenberg</a>");
-		// TODO, finish up fields.
-		html.println("</a>");
+		html.println("<form action=\"/review\" method=\"POST\">");
+		html.println("<input type=\"hidden\" name=\"book\" value="+book.id+">"); 
+		html.println("<input type=\"submit\" value=\"Flag Entry!\" />"); 
+		html.println("</form>"); 
 		html.println("</div>");
+		
 	}
+
 	
+//	private void printBookHTML(PrintWriter html, GutenbergBook book) {
+//		html.println("<div class='book'>");
+//		html.println("<a class='none' href='/book/"+book.id+"'>");
+//		html.println("<div class='title'>"+book.title+"</div>");
+//		if(book.creator != null) {
+//			html.println("<div class='creator'>" + book.creator + "</div>");
+//		}
+//		html.println("<a href='"+book.getGutenbergURL()+"'>On Project Gutenberg</a>");
+//		// TODO, finish up fields.
+//		html.println("</a>");
+//		html.println("</div>");
+//	}
+//	
 	
 	public void showBookPage(GutenbergBook book, HttpServletResponse resp) throws IOException {
 		try (PrintWriter html = resp.getWriter()) {
