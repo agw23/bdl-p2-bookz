@@ -1,5 +1,5 @@
 body {
-    background-color: #077;
+     background-image: url("bookzdesktop.jpg");
 }
 .body{
     margin:40px auto;
@@ -10,7 +10,7 @@ body {
 }
 h1,h2,h3{
     line-height:1.2;
-    color: white;
+    color: cyan;
 }
 label {
 	display: block;
