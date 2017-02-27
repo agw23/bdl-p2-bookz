@@ -120,8 +120,7 @@ public class BookzServer extends AbstractHandler {
 			if("POST".equals(method) && "/search".equals(path))
 			{		
 					//model.addtoSearchList(req.getParameter("book"));
-					showResultsPage(req, resp);
-		
+					showResultsPage(req, resp);	
 			}
 
 	
@@ -148,15 +147,19 @@ public class BookzServer extends AbstractHandler {
 		    String message = Util.join(parameterMap.get("message"));		    
 		    String author = Util.join(parameterMap.get("author"));
 
-		    if(!message.equals("") || !author.equals("")) 
+		    if(!message.equals(""))
 		    {
 		      // Good, got new message from form.
 		      resp.setStatus(HttpServletResponse.SC_ACCEPTED); 
 		      view.printHTMLResultsPage(model.getBooksStartingWithTitles(message), resp);
-		      view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
-		      
 		      return;
 		    }
+		    
+//		    else if ( !author.equals(""))
+//		    {
+//		    	view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
+//		    	return;
+//		    }
 		    // user submitted something weird.
 		    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad user.");
 		 }

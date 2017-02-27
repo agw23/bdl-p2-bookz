@@ -77,9 +77,12 @@ public class HTMLView {
 			html.println(" <div class= \"form\">");
 				html.println(" <form action=\"search\" method= \"POST\"> ");
 				html.println(" <div><input type=\"text\" size=40 name=\"message\" id=\"message\" placeholder=\"Search by Title\" />");
+				html.println(" <input type = \"submit\" value=\"Search for your book by title!\" />");
 				html.println(" <div><input type=\"text\" size=40 name=\"author\" id=\"author\" placeholder=\"Search by Author\" />");
+				html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
 				html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\" /> " );
-				html.println(" <input type = \"submit\" value=\"Search for your book!\" />");
+				//html.println(" <input type = \"submit\" value=\"Search for your book by title!\" />");
+				//html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
 				html.println( "</form>" );
 				html.println(" </div>");
 				
