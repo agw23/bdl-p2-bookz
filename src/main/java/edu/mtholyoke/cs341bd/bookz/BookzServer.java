@@ -103,8 +103,9 @@ public class BookzServer extends AbstractHandler {
 				}
 		
 
-		if("POST".equals(method) && "/search".equals(path))
-		{		
+		if("GET".equals(method) && path.contains("/search"))
+		{	
+			
 			showResultsPage(req, resp);	
 		}
 
@@ -158,6 +159,7 @@ public class BookzServer extends AbstractHandler {
 
 	private void showResultsPage(HttpServletRequest req, HttpServletResponse resp) throws IOException 
 	{
+		System.out.println("Showed up here");
 		Map<String, String[]> parameterMap = req.getParameterMap();
 		// if for some reason, we have multiple "message" fields in our form, just put a space between them, see Util.join.
 		// Note that message comes from the name="message" parameter in our <input> elements on our form.
@@ -166,18 +168,24 @@ public class BookzServer extends AbstractHandler {
 		
 		String url = "/search";
 		HashMap<String,String> parameters = new HashMap<>();
-		//parameters.put("message", message);
-		//parameters.put("author", author);
+		parameters.put("message", message);
+		parameters.put("author", author);
 		
 		//resp.getWriter().println("<a href='"+Util.encodeParametersInURL(parameters, url)+"'>link to here</a>");
 		//view.showBookCollection(resp, parameters, "title", 20);
 		System.out.println(author);
 		System.out.println(message);
+		String maybePage = req.getParameter("page");
+		if (maybePage == null) {
+			maybePage = "1"; 
+		}
+		int page_number = Integer.parseInt(maybePage); 
 		if(!message.equals(""))
 		{
+			
 			// Good, got new message from form.
 			resp.setStatus(HttpServletResponse.SC_ACCEPTED); 
-			view.showBookCollection(model.getBooksStartingWithTitles(message), resp, parameters, "title", 40);
+			view.showBookCollection(model.getBooksStartingWithTitles(message), resp, parameters, req.getPathInfo(), page_number);
 
 			//view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
 			return;
@@ -185,7 +193,7 @@ public class BookzServer extends AbstractHandler {
 
 		else if ( !author.equals(""))
 		{
-			view.showBookCollection(model.getBooksStartingWithTitles(message), resp, parameters, "title", 40);
+			view.showBookCollection(model.getBooksStartingWithTitles(author), resp, parameters, req.getPathInfo(), page_number);
 			return;
 		}
 		// user submitted something weird.

@@ -77,14 +77,10 @@ public class HTMLView {
 	{		
 			//<!-- forms can do POST or GET or even others like PUT as you write inside method -->
 			html.println(" <div class= \"form\">");
-				html.println(" <form action=\"search\" method= \"POST\"> ");
+				html.println(" <form action=\"/search\" method= \"GET\"> ");
 				html.println(" <div><input type=\"text\" size=40 name=\"message\" id=\"message\" placeholder=\"Search\"/>");
 				//html.println(" <input type = \"submit\" value=\"Search for author/title!\" />");
 				html.println(" <div><input type=\"text\" size=40 name=\"author\" id=\"author\" placeholder=\"Search by Author\" />");
-				//html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
-				//html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\" /> " );
-				//html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
-				//html.println(" <input type = \"submit\" value=\"Search for your book!\" />");
 				html.println(" <input type = \"submit\" value=\"Search for author/title!\" />");
 				html.println( "</form>" );
 				html.println(" </div>");
