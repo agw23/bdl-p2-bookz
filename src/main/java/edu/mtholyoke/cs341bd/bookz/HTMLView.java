@@ -160,8 +160,9 @@ public class HTMLView {
 		try (PrintWriter html = resp.getWriter()) 
 		{
 			printPageStart(html, "Bookz");
-			if (listSize < 10) {
-				for (int i = 0; i < listSize; i++) 
+			
+			if (theBooks.size() < 10) {
+				for (int i = 0; i < theBooks.size(); i++) 
 					printBookHTML(html, theBooks.get(i));
 			}
 			else {
