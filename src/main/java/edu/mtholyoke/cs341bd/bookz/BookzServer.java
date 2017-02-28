@@ -158,7 +158,7 @@ public class BookzServer extends AbstractHandler {
 
 	private void showResultsPage(HttpServletRequest req, HttpServletResponse resp) throws IOException 
 	{
-		System.out.println("Showed up here");
+		
 		Map<String, String[]> parameterMap = req.getParameterMap();
 		// if for some reason, we have multiple "message" fields in our form, just put a space between them, see Util.join.
 		// Note that message comes from the name="message" parameter in our <input> elements on our form.
@@ -170,10 +170,6 @@ public class BookzServer extends AbstractHandler {
 		parameters.put("message", message);
 		parameters.put("author", author);
 		
-		//resp.getWriter().println("<a href='"+Util.encodeParametersInURL(parameters, url)+"'>link to here</a>");
-		//view.showBookCollection(resp, parameters, "title", 20);
-		System.out.println(author);
-		System.out.println(message);
 		String maybePage = req.getParameter("page");
 		if (maybePage == null) {
 			maybePage = "1"; 
@@ -186,7 +182,6 @@ public class BookzServer extends AbstractHandler {
 			resp.setStatus(HttpServletResponse.SC_ACCEPTED); 
 			view.showBookCollection(model.getBooksStartingWithTitles(message), resp, parameters, req.getPathInfo(), page_number);
 
-			//view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
 			return;
 		}
 

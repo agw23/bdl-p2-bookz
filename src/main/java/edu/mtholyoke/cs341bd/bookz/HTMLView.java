@@ -160,9 +160,14 @@ public class HTMLView {
 		try (PrintWriter html = resp.getWriter()) 
 		{
 			printPageStart(html, "Bookz");
-			
-			for (int i = listSize*10-10; i < listSize*10; i++) {
-				printBookHTML(html, theBooks.get(i));
+			if (listSize < 10) {
+				for (int i = 0; i < listSize; i++) 
+					printBookHTML(html, theBooks.get(i));
+			}
+			else {
+				for (int i = listSize*10-10; i < listSize*10; i++) {
+					printBookHTML(html, theBooks.get(i));
+					}
 			}
 			showPageNumbers(theBooks, resp, parameters, url, listSize);
 			printPageEnd(html);
