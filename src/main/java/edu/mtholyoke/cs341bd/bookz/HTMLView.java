@@ -60,7 +60,7 @@ public class HTMLView {
 			html.println("<h3>Browse books by title</h3>");
 
 			for(char letter = 'A'; letter <= 'Z'; letter++) {
-				html.println("<a href='/title/"+letter+"'>"+letter+"</a> ");
+				html.println("<a href='/title/"+letter+"' style=\"color:#fff\">"+letter+"</a> ");
 			}
 
 			// get 5 random books:
@@ -78,10 +78,10 @@ public class HTMLView {
 			//<!-- forms can do POST or GET or even others like PUT as you write inside method -->
 			html.println(" <div class= \"form\">");
 				html.println(" <form action=\"/search\" method= \"GET\"> ");
-				html.println(" <div><input type=\"text\" size=40 name=\"message\" id=\"message\" placeholder=\"Search\"/>");
+				html.println(" <div><input type=\"text\" size=40 name=\"message\" id=\"message\" placeholder=\"Search by Title\"/>");
 				//html.println(" <input type = \"submit\" value=\"Search for author/title!\" />");
 				html.println(" <div><input type=\"text\" size=40 name=\"author\" id=\"author\" placeholder=\"Search by Author\" />");
-				html.println(" <input type = \"submit\" value=\"Search for author/title!\" />");
+				html.println("  <div id =\"button1\"><input type = \"submit\" value=\"Search\" />");
 				html.println( "</form>" );
 				html.println(" </div>");
 				
@@ -141,7 +141,7 @@ public class HTMLView {
 		try (PrintWriter html = resp.getWriter()) {
 			for(int i = 1; i <= theBooks.size()/10; i++) {
 				html.println("<a href='"+
-			          Util.encodeParametersInURL(parameters, url)+"&page="+i+"'>"+i+"</a>");
+			          Util.encodeParametersInURL(parameters, url)+"&page="+i+"' style=\"color:#fff\">"+i+"</a>");
 			}
 		}
 	}
@@ -179,7 +179,6 @@ public class HTMLView {
 		html.println("  </head>");
 		html.println("  <body>");
 		 
-		//TODO: figure out why review won't link to itself
 		html.println("  <a href='/front'><h1 class=\"logo\">"+title+"</h1></a>");
 		html.println("<h2> Flagged books </h2>");
 }

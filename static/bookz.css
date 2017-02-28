@@ -1,6 +1,9 @@
+
+
 body {
-     background-image: url("/static/bookzdesktop.jpg");
+     background-image: url("/static/bookzd.jpg");
 }
+
 .body{
     margin:40px auto;
     max-width:600pt;
@@ -8,24 +11,61 @@ body {
     font-size:18px;
     padding:0 10px
 }
+
 h1,h2,h3{
     line-height:1.2;
-    color: cyan;
+    font-family: Tahoma, Geneva, sans-serif;
+    color: #ffe6cc;
 }
+
 label {
-	display: block;
+    display: block;
 }
+
+
+.cmt-form {
+    margin-top: 20pt;
+}
+
 span.datetime {
     margin-right: 10pt;
     color: #444;
 }
-h1.logo {
-    color: #fff;
+
+div.form {
+        display: block;
+        font-family: Tahoma, Geneva, sans-serif;
+        text-align: center;
+}
+
+
+div.message 
+{
+    border: solid 1px #ccc;
+    margin: 12pt;
+    padding: 5pt;
+    background-color: #eee;
+}
+
+div.author 
+{
+    border: solid 1px #ccc;
+    margin: 12pt;
+    padding: 5pt;
+    background-color: #eee;
+}
+
+
+h1.logo 
+{
+    color: #ffcc99; 
+    text-align: center;
 }
 a.none {
-	text-decoration: none;
-	color: #000;
+    text-decoration: none;
+    color: #000;
 }
+
 div.book {
     border: 1pt solid black;
     padding: 3pt;
