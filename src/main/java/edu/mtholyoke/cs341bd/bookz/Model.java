@@ -59,7 +59,7 @@ public class Model
 		for (GutenbergBook book : library.values()) {
 			
 			String first = book.title.toLowerCase();
-			if(first.contains(myTitle)) 
+			if(first.contains(myTitle.toLowerCase())) 
 			{	
 				matches.add(book);
 			}
@@ -87,7 +87,7 @@ public class Model
 				if (book.creator != null)
 				{	
 					first = book.creator.toLowerCase();
-					if(first.contains(author)) 
+					if(first.contains(author.toLowerCase())) 
 					{	
 						matches.add(book);
 					}

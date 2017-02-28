@@ -95,7 +95,6 @@ public class BookzServer extends AbstractHandler {
 
 				if ("POST".equals(method)&&"/review".equals(path)) 
 				{
-					//System.out.println(req.getParameter("book")); 
 					model.addToReview(req.getParameter("book"));
 					try (PrintWriter txt = resp.getWriter()) {
 						view.printReviewPage(model.getReview(), txt); 
