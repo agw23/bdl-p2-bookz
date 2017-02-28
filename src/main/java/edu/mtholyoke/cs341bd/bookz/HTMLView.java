@@ -1,8 +1,10 @@
 package edu.mtholyoke.cs341bd.bookz;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 public class HTMLView {
@@ -80,7 +82,7 @@ public class HTMLView {
 				//html.println(" <input type = \"submit\" value=\"Search for author/title!\" />");
 				html.println(" <div><input type=\"text\" size=40 name=\"author\" id=\"author\" placeholder=\"Search by Author\" />");
 				//html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
-				html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\" /> " );
+				//html.println("<input type=\"hidden\" name=\"book\" value=\"etext77\" /> " );
 				//html.println(" <input type = \"submit\" value=\"Search for your book by author!\" />");
 				//html.println(" <input type = \"submit\" value=\"Search for your book!\" />");
 				html.println(" <input type = \"submit\" value=\"Search for author/title!\" />");
@@ -139,39 +141,34 @@ public class HTMLView {
 		
 	}
 
-	
-//	private void printBookHTML(PrintWriter html, GutenbergBook book) {
-//		html.println("<div class='book'>");
-//		html.println("<a class='none' href='/book/"+book.id+"'>");
-//		html.println("<div class='title'>"+book.title+"</div>");
-//		if(book.creator != null) {
-//			html.println("<div class='creator'>" + book.creator + "</div>");
-//		}
-//		html.println("<a href='"+book.getGutenbergURL()+"'>On Project Gutenberg</a>");
-//		// TODO, finish up fields.
-//		html.println("</a>");
-//		html.println("</div>");
-//	}
-//	
+	public void showPageNumbers(List<GutenbergBook> theBooks, HttpServletResponse resp, HashMap<String, String> parameters, String url, int listSize) throws IOException {
+		try (PrintWriter html = resp.getWriter()) {
+			for(int i = 1; i <= theBooks.size()/10; i++) {
+				html.println("<a href='"+
+			          Util.encodeParametersInURL(parameters, url)+"&page="+i+"'>"+i+"</a>");
+			}
+		}
+	}
 	
 	public void showBookPage(GutenbergBook book, HttpServletResponse resp) throws IOException {
 		try (PrintWriter html = resp.getWriter()) {
 			printPageStart(html, "Bookz");
 			printBookHTML(html, book);
+			
 			printPageEnd(html);
 		}
 	}
 
 	
-	public void showBookCollection(List<GutenbergBook> theBooks, HttpServletResponse resp) throws IOException {
+	public void showBookCollection(List<GutenbergBook> theBooks, HttpServletResponse resp, HashMap<String, String> parameters, String url, int listSize) throws IOException {
 		try (PrintWriter html = resp.getWriter()) 
 		{
 			printPageStart(html, "Bookz");
-
-			for (int i = 0; i < Math.min(20,theBooks.size()); i++) {
+			
+			for (int i = listSize*10-10; i < listSize*10; i++) {
 				printBookHTML(html, theBooks.get(i));
 			}
-
+			showPageNumbers(theBooks, resp, parameters, url, listSize);
 			printPageEnd(html);
 		}
 	}

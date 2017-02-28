@@ -8,13 +8,13 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -123,11 +123,18 @@ public class BookzServer extends AbstractHandler {
 			
 
 			String titleCmd = Util.getAfterIfStartsWith("/title/", path);
+			System.out.println(titleCmd);
 			if(titleCmd != null) 
 			{
+				String page = req.getParameter("page");
+				System.out.println("Page " + page);
+				if(page == null) {
+					page = "1";
+				}
 				
 				char firstChar = titleCmd.charAt(0);
-				view.showBookCollection(this.model.getBooksStartingWith(firstChar), resp);
+				
+				view.showBookCollection(this.model.getBooksStartingWith(firstChar), resp, new HashMap<String, String>(), path, Integer.parseInt(page));
 			}
 
 
@@ -157,20 +164,28 @@ public class BookzServer extends AbstractHandler {
 		String message = Util.join(parameterMap.get("message"));		    
 		String author = Util.join(parameterMap.get("author"));
 		
+		String url = "/search";
+		HashMap<String,String> parameters = new HashMap<>();
+		//parameters.put("message", message);
+		//parameters.put("author", author);
+		
+		//resp.getWriter().println("<a href='"+Util.encodeParametersInURL(parameters, url)+"'>link to here</a>");
+		//view.showBookCollection(resp, parameters, "title", 20);
 		System.out.println(author);
 		System.out.println(message);
 		if(!message.equals(""))
 		{
 			// Good, got new message from form.
 			resp.setStatus(HttpServletResponse.SC_ACCEPTED); 
-			view.printHTMLResultsPage(model.getBooksStartingWithTitles(message), resp);
+			view.showBookCollection(model.getBooksStartingWithTitles(message), resp, parameters, "title", 40);
+
 			//view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
 			return;
 		}
 
 		else if ( !author.equals(""))
 		{
-			view.printHTMLResultsPage(model.getBooksStartingWithAuthor(author), resp);
+			view.showBookCollection(model.getBooksStartingWithTitles(message), resp, parameters, "title", 40);
 			return;
 		}
 		// user submitted something weird.
